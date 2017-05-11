@@ -22,24 +22,12 @@ public class Fermata {
 		return idFermata;
 	}
 
-	public void setIdFermata(int idFermata) {
-		this.idFermata = idFermata;
-	}
-
 	public String getNome() {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	public LatLng getCoords() {
 		return coords;
-	}
-
-	public void setCoords(LatLng coords) {
-		this.coords = coords;
 	}
 
 	@Override
