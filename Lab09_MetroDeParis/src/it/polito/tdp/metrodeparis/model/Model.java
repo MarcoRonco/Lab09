@@ -2,6 +2,7 @@ package it.polito.tdp.metrodeparis.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -17,33 +18,32 @@ import it.polito.tdp.metrodeparis.dao.MetroDAO;
 
 public class Model {
 
-	private WeightedMultigraph<Fermata, Tratta> grafo = new WeightedMultigraph<>(Tratta.class);
-	private MetroDAO dao = new MetroDAO();
-
-	private List<Fermata> f = dao.getAllFermate();
-	private List<Collegamento> c = dao.getAllCollegamenti();
-	public Fermata getFermata(int i){
-		for(Fermata x : f){
-			if(x.getIdFermata()==i){
-				return x;
-			}
-		}
-		return null;
-	}
+	private WeightedMultigraph<Fermata, Tratta> grafo;
+	private MetroDAO dao;
+	private Map<Integer, Fermata> f;
+	private List<Collegamento> c;
 	
+	public Model() {
+		super();
+		this.dao= new MetroDAO();
+		this.f = dao.getAllFermate();
+		this.c = dao.getAllCollegamenti();
+	}
+
 	public Set<Fermata> createGraph() {
 		
-		for (Fermata x : f) {
+		grafo = new WeightedMultigraph<>(Tratta.class);
+		
+		for (Fermata x : f.values()) {
 			grafo.addVertex(x);
 		}
 
 		double tempo = 0;
 		
 		for(Collegamento y : c){
-			if(grafo.containsVertex(y.getA()) && grafo.containsVertex(y.getB())){
-				Tratta t = grafo.addEdge(y.getA(), y.getB());
+			if(f.containsKey(y.getA()) && f.containsKey(y.getB())){
+				Tratta t = grafo.addEdge(f.get(y.getA()), f.get(y.getB()));
 				if(t!=null){
-					System.out.println(t);
 					tempo = this.tempo(grafo.getEdgeSource(t), grafo.getEdgeTarget(t), y.getL());
 					grafo.setEdgeWeight(t, tempo);
 				}
@@ -55,7 +55,7 @@ public class Model {
 	public double tempo(Fermata a, Fermata b, Linea l) {
 		double d = LatLngTool.distance(a.getCoords(), b.getCoords(), LengthUnit.KILOMETER);
 		int v = l.getVelocita();
-		return (d * v*3600);
+		return ((d/v)*60);
 	}
 	
 	public String camminoMinimo(Fermata a, Fermata b){
@@ -69,13 +69,15 @@ public class Model {
 		int count = 0;
 		
 		for(Tratta x : shortest.getPathEdgeList()){
+			if(count==shortest.getPathEdgeList().size()-1)
+				break;
+			
 			s+=x.toString()+" -> ";
 			p+=x.peso();
 			count++;
 		}
-		
-		p =(p+count*30);
-		s+="\nTempo necessario per il cammino: "+p;
+		s+=b.toString();
+		s+="\nTempo necessario per il cammino: "+p+" minuti";
 		return s;
 	}
 }

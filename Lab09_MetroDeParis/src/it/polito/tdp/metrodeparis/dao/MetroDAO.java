@@ -4,8 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.javadocmd.simplelatlng.LatLng;
 
@@ -15,13 +14,14 @@ import it.polito.tdp.metrodeparis.model.Linea;
 
 public class MetroDAO {
 
-	public List<Fermata> getAllFermate() {
+	public Map<Integer, Fermata> getAllFermate() {
 
 		final String sql = "SELECT id_fermata, nome, coordx, coordy "
 						 + "FROM fermata "
 						 + "ORDER BY nome ASC";
 		
-		List<Fermata> fermate = new ArrayList<Fermata>();
+
+		Map<Integer ,Fermata> fermate = new HashMap<>();
 
 		try {
 			Connection conn = DBConnect.getInstance().getConnection();
@@ -30,7 +30,7 @@ public class MetroDAO {
 
 			while (rs.next()) {
 				Fermata f = new Fermata(rs.getInt("id_Fermata"), rs.getString("nome"), new LatLng(rs.getDouble("coordx"), rs.getDouble("coordy")));
-				fermate.add(f);
+				fermate.put(rs.getInt("id_Fermata"), f);
 			}
 			st.close();
 			conn.close();
@@ -56,8 +56,8 @@ public class MetroDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-				Fermata a = new Fermata(rs.getInt("id_stazP"));
-				Fermata b = new Fermata(rs.getInt("id_stazA"));
+				int a = rs.getInt("id_stazP");
+				int b = rs.getInt("id_stazA");
 				Linea l = new Linea(rs.getDouble("id_linea"), rs.getString("nome"), rs.getInt("velocita"), rs.getInt("intervallo"), rs.getString("colore"));
 				Collegamento x = new Collegamento(a, b, rs.getInt("id_connessione"), l);
 				c.add(x);

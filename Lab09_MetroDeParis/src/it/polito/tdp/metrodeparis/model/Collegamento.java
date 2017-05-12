@@ -5,12 +5,12 @@ import com.javadocmd.simplelatlng.util.*;
 
 public class Collegamento{
 	
-	private Fermata a;
-	private Fermata b;
+	private int a;
+	private int b;
 	private int id;
 	private Linea l;
 	
-	public Collegamento(Fermata a, Fermata b, int id, Linea l) {
+	public Collegamento(int a, int b, int id, Linea l) {
 		super();
 		this.a = a;
 		this.b = b;
@@ -18,11 +18,11 @@ public class Collegamento{
 		this.l = l;
 	}
 
-	public Fermata getA() {
+	public int getA() {
 		return a;
 	}
 
-	public Fermata getB() {
+	public int getB() {
 		return b;
 	}
 
