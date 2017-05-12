@@ -8,9 +8,9 @@ public class Collegamento{
 	private int a;
 	private int b;
 	private int id;
-	private Linea l;
+	private double l;
 	
-	public Collegamento(int a, int b, int id, Linea l) {
+	public Collegamento(int a, int b, int id, double l) {
 		super();
 		this.a = a;
 		this.b = b;
@@ -30,7 +30,7 @@ public class Collegamento{
 		return id;
 	}
 
-	public Linea getL() {
+	public double getL() {
 		return l;
 	}
 }

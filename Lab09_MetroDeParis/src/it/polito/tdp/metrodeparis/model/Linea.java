@@ -37,6 +37,10 @@ public class Linea {
 		return colore;
 	}
 
+	public int getIntervallo() {
+		return intervallo;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

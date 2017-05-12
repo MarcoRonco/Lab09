@@ -1,6 +1,7 @@
 package it.polito.tdp.metrodeparis;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.metrodeparis.model.Fermata;
@@ -18,8 +19,9 @@ public class MetroDeParisController {
 	public void setModel(Model m){
 		
 		this.m = m;
-		comboPartenza.getItems().addAll(m.createGraph());
-		comboArrivo.getItems().addAll(m.createGraph());
+		List<Fermata> f = m.createGraph();
+		comboPartenza.getItems().addAll(f);
+		comboArrivo.getItems().addAll(f);
 	}
 
     @FXML // ResourceBundle that was given to the FXMLLoader
